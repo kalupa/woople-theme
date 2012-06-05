@@ -2,6 +2,8 @@ require 'ostruct'
 
 class BrowseController < ApplicationController
   layout 'theme'
+  
+  helper_method :random_unit, :random_video
 
   def video
     @course = random_course
@@ -22,11 +24,18 @@ class BrowseController < ApplicationController
     10.times do
       @content_items << random_course
     end
-
   end
 
   def course
     @course = random_course
+  end
+  
+  def search
+    @content_items = []
+
+    3.times do
+      @content_items << random_course
+    end
   end
 
   private
@@ -36,7 +45,7 @@ class BrowseController < ApplicationController
       name: course_names.sample,
       description: 'Here is a sample description',
       url: '/course',
-      completed: completed.sample,
+      completed?: completed.sample,
       percent_complete: rand(100),
       image: images.sample,
       time_remaining: rand(10000),
@@ -47,12 +56,11 @@ class BrowseController < ApplicationController
     )
   end
 
-  def random_unit(unit_index, enabled = false, completed_videos = 3)
+  def random_unit(unit_index = 0, enabled = false, completed_videos = 3)
     OpenStruct.new(
       name: course_names.sample,
       enabled: (unit_index == 0),
-      assessment: [true, false].sample,
-      assessment_enabled: false,
+      assessment: random_assessment,
       completed: 2,
       videos: rand((completed_videos+1)..(completed_videos*3)).times.collect { |index| 
         random_video("#{unit_index}_#{index}", 
@@ -62,6 +70,27 @@ class BrowseController < ApplicationController
                     )
       },
       downloads: [random_download(unit_index == 0)]
+    )
+  end
+
+  def random_assessment
+    OpenStruct.new(
+      questions_asked: rand(5..15),
+      pass_requirement: [50, 75, 100].sample,
+      estimated_duration: rand(5..25),
+      enabled?: [true, false].sample,
+      url: [nil, '#'].sample,
+      relearnings: rand(0..7).times.collect { |index| random_video(index, true, true, true) },
+      history: rand(0..7).times.collect { random_history_item }
+    )
+  end
+
+  def random_history_item
+    OpenStruct.new(
+      completed_at: Time.new([2010, 2011, 2012].sample, rand(1..12), rand(1..28), rand(0..12), rand(0..59), rand(0..59)),
+      score: [40, 50, 70].sample,
+      passed: [false, true].sample,
+      url: '#'
     )
   end
 
@@ -98,7 +127,7 @@ class BrowseController < ApplicationController
   end
 
   def completed
-    ['completed', '']
+    [true, false]
   end
 
   def certification_metadata

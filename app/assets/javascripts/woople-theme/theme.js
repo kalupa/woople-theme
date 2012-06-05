@@ -5,8 +5,10 @@
 //= require twitter/bootstrap/dropdown
 //= require twitter/bootstrap/modal
 //= require twitter/bootstrap/button
+//= require twitter/bootstrap/alert
 //= require fastclick.min_
 //= require video.min
+//= require assessment_flipper
 //= require_tree .
 
 function resizeFix() {
@@ -39,8 +41,64 @@ function paginationLoading(element, options) {
   span.append(spinner.el);
 }
 
-function visitLocation(element) {
-  window.location = $(element).find('a').attr('href');
+function visitLocation(element, newWindow) {
+  var url = $(element).find('a').attr('href');
+
+  if (newWindow) {
+    window.open(url, "_blank");
+  } else {
+    window.location = url;
+  }
+}
+
+function nonMobileScreen() {
+  return ($(window).width() > 768);
+}
+
+function mobileSearchToggle() {
+  var mobileSearch = $('<div></div>').addClass('mobile-search');
+
+  $(window).resize(function(e) {
+    if ( nonMobileScreen() ) {
+      $('#masthead').removeClass('mobile-search-visible');
+      $('.container .menu').removeClass('mobile-search-visible');
+      $('.mobile-search').html(null);
+      $('.mobile-search').hide();
+    }
+  });
+
+  $('a.search-page').on('click', function(e) {
+    e.preventDefault();
+
+    if ( nonMobileScreen() ) {
+      return;
+    }
+
+    var masthead        = $('#masthead');
+    var menu            = $('.container .menu');
+    var form            = $('form.search');
+    var profile         = $('.profile');
+
+    var clonedForm      = form.clone(true);
+    var menuOffset      = menu.offset();
+
+    masthead.toggleClass('mobile-search-visible');
+    menu.toggleClass('mobile-search-visible');
+
+    $(clonedForm).children('a').remove();
+
+    if ($(mobileSearch).is(":visible")) {
+      mobileSearch.html(null);
+      mobileSearch.hide();
+    } else {
+      mobileSearch.html(clonedForm);
+      mobileSearch.show();
+      $(profile).before(mobileSearch);
+    }
+
+    return false;
+  });
+
 }
 
 $(document).ready(function() {
@@ -50,14 +108,19 @@ $(document).ready(function() {
     new FastClick(document.body);
   }
 
-  $('.outline tr').not('.disabled, .download').on('click', function() {
-    setLoading('td:first-child', this, {
-      lines:  9,
-      radius: 3,
-      length: 4,
-      width:  2
-    });
-    visitLocation(this);
+  $('.outline tr').not('.disabled').on('click', function(e) {
+    e.preventDefault();
+
+    if (!$(this).hasClass('download')) {
+      setLoading('td:first-child', this, {
+        lines:  9,
+        radius: 3,
+        length: 4,
+        width:  2
+      });
+    }
+
+    visitLocation(this, $(this).hasClass('download'));
   });
 
   $('.content-item').on('click', function() {
@@ -76,4 +139,5 @@ $(document).ready(function() {
     });
   });
 
+  mobileSearchToggle();
 });
