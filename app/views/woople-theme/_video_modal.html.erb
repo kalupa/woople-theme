@@ -34,15 +34,8 @@
     modes: [{
       type: "flash",
       src: "/assets/jwplayer/player.swf"
-    },{
-      type: "html5",
-      config: {
-        file: '<%= video.mobile_src.html_safe %>',
-        provider: "video"
-      }
     }],
-    provider: "rtmp",
-    streamer: '<%= video.streamer %>',
+    provider: "video",
     width: '100%',
     plugins: {
       "gapro-2":{}
