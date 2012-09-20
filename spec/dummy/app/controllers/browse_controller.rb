@@ -304,13 +304,11 @@ class BrowseController < ApplicationController
   end
 
   def mobile_src
-    #default_src
-    'https://d20sw891o143ul.cloudfront.net/videos/11027/mobile/Lesson_20120724065914.mp4?Expires=1348256638&Signature=eCyRREuP8RrlDt0NPO2~OX58dKA1UTZgdwT4DJDY-yoO85UDw4ifwdwV8j1npOCJY225x6IPN9JcAT9dalPkD~dQjRaPD8luQcJJLdjNsV8B5P9LSBJf4ULwu0bhXVtcIKPG7b5uuUwgZTY7eCzXURUmy02f0c05Eb-5AUMeL~E_&Key-Pair-Id=APKAJALW276JSCGKJJNQ'
+    default_src
   end
 
   def desktop_src
-    #default_src
-    'mp4:videos/11027/encoded_288/Lesson_20120724065914.mp4?Expires=1348256197&Signature=mVHpaLg60KsgXsMv8crfjDHBZYQh4oLMLPjvzqYXYjg4U6-xLmbZoxuBqRXmAVLwbgWm0HbMk0pQFyEQo-vPuEcpZIZCax77hnaVKV0XRQFg9~-SOmmQ82I-BNO9p1XTUctLXFy3F6XHsI1CZTUXONVJdBEZrJvs0iHM9ug7BSA_&Key-Pair-Id=APKAJALW276JSCGKJJNQ'
+    default_src
   end
 
   def default_src
