@@ -1,10 +1,10 @@
 <tr class="<%= outline_download.css_class %>">
   <% if outline_download.enabled %>
   <td class="icons">
-    <%= link_to("<i class='icon-download-alt'> </i> ".html_safe, outline_download.url, target: '_blank') %>
+    <%= link_to("<i class='icon-download-alt'> </i> ".html_safe, outline_download.url) %>
   </td>
   <td>
-    <%= link_to(outline_download.name, outline_download.url, target: '_blank') %>
+    <%= link_to(outline_download.name, outline_download.url) %>
   </td>
   <% else %>
   <td class="icons">
